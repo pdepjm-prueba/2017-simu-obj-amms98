@@ -53,9 +53,9 @@ class Capataz inherits Rol{
 		}
 		else{
 			super(self.empleadoMasCapaz(tarea),tarea.dificultad())
-			
 		}
 	}
+	
 	override method defender(empleado){
 		if(self.mejoresEmpleadosParaTarea(tarea).size()==0){
 			tarea.trabajar(empleado)
