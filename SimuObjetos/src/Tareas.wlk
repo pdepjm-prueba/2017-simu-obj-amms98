@@ -6,12 +6,14 @@ class Tarea{
 	method trabajar(empleado){
 		
 		if(self.puedeTrabajar(empleado)){
-			throw new NoCumpleConCondicionParaTrabajarException()
+			self.exception()
 		}
 		else{
 			self.prodecimiento(empleado)
 		}
 	}
+	method exception()
+	method dificultad(empleado)
 }
 class ArreglarMaquina inherits Tarea{
 	var complejidadMaquina
@@ -20,13 +22,14 @@ class ArreglarMaquina inherits Tarea{
 		complejidadMaquina=_complejidadMaquina
 		herramientasNecesarias=_herramientasNecesarias
 	}
+	override method exception()=throw new NoPuedeArreglarException()
 	override method puedeTrabajar(empleado)=empleado.tieneStaminaSuficiente(complejidadMaquina) and empleado.tieneHerramientasNecesarias(herramientasNecesarias)
 	
 	override method prodecimiento(empleado){
-		empleado.cansarse(complejidadMaquina)
+		empleado.arreglar(complejidadMaquina)
 	}
 	
-	method dificultad(empleado)=complejidadMaquina
+	override method dificultad(empleado)=complejidadMaquina
 }
 
 class DefenderSector inherits Tarea{
@@ -34,22 +37,23 @@ class DefenderSector inherits Tarea{
 	constructor(_gradoAmenaza){
 		gradoAmenaza=_gradoAmenaza
 	}
-	override method puedeTrabajar(empleado)=not(empleado.esMucama()) and empleado.fuerza()>gradoAmenaza
+	override method exception()=throw new NoPuedeDefenderException()
+	override method puedeTrabajar(empleado)=not(empleado.puedeDefender()) and empleado.fuerza()>gradoAmenaza
 	
 	override method prodecimiento(empleado){
 		empleado.defender()
 	}
 	
-	method dificultad(empleado)=gradoAmenaza*empleado.factorDificultad()
+	override method dificultad(empleado)=gradoAmenaza*empleado.factorDificultad()
 }
 
-class LimpiarSector inherits Tarea{
+class LimpiarSector inherits Tarea{	
 	var dificultad=10
 	var tipoSector=null
 	constructor (_tipoSector){
 		tipoSector=_tipoSector
 	}
-	
+	override method exception()=throw new NoPuedeLimpiarException()
 	method cambiarDificultar(_dificultad){
 		dificultad=_dificultad
 	}
@@ -60,11 +64,18 @@ class LimpiarSector inherits Tarea{
 		empleado.limpiar(tipoSector)
 	}
 	
-	method dificultad(empleado)=dificultad
+	override method dificultad(empleado)=dificultad
 	
 }
 
-class NoCumpleConCondicionParaTrabajarException inherits Exception{
+class NoPuedeArreglarException inherits Exception{
+	
+}
+
+class NoPuedeLimpiarException inherits Exception{
+	
+}
+class NoPuedeDefenderException inherits Exception{
 	
 }
 

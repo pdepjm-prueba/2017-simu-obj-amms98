@@ -23,7 +23,11 @@ class Empleado{
 	
 	method tieneHerramientasNecesarias(herramientas)=rol.tieneHerramientasNecesarias(herramientas)
 	
-	method esMucama()=rol.EsMucama()
+	method arreglar(complejidadMaquina){
+		rol.arreglar(self,complejidadMaquina)
+	}
+	
+	method puedeDefender()=rol.puedeDefender()
 	
 	method fuerza()=(stamina/2+2+self.fuerzaExtra())*self.factorFuerza()
 	method fuerzaExtra()=rol.fuerzaExtra()

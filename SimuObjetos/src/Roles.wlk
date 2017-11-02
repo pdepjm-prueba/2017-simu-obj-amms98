@@ -1,7 +1,9 @@
 class Rol{
 	method tieneHerramientasNecesarias(herramientas)=#{}
-	
-	method esMucama()=false
+	method arreglar(empleado,complejidadMaquina){
+		empleado.cansarse(complejidadMaquina)
+	}
+	method puedeDefender()=true
 	method fuerzaExtra()=0
 	method defender(empleado){
 		empleado.perderMitadStamina()
@@ -11,6 +13,7 @@ class Rol{
 		empleado.cansarse(tipoSector.staminaNecesaria())
 	}
 }
+
 class Soldado inherits Rol{
 	var practica=0
 	method defender(){
@@ -31,8 +34,36 @@ class Obrero inherits Rol{
 
 
 class Mucama inherits Rol{
-	override method esMucama()=true
+	override method puedeDefender()=false
 	override method limpiar(empleado,tipoSector){
 	}
 }
 
+class Capataz inherits Rol{
+	var empleados=#{}
+	method agregarEmpleados(empleado){
+		empleados.add(empleado)
+	}
+	
+	method empleadosCapaces(tarea)=empleados.filter({empleado=>tarea.puedeTrabajar(empleado)})
+	method empleadoMasCapaz(tarea)=self.empleadosCapaces(tarea).max({emp=>emp.experiencia()})
+	override method arreglar(empleado,tarea){
+		if(self.empleadosCapaces(tarea)==null){
+			super(empleado,tarea.dificultad())
+		}
+		else{
+			super(self.empleadoMasCapaz(tarea),tarea.dificultad())
+			
+		}
+	}
+	override method defender(empleado){
+		if(self.mejoresEmpleadosParaTarea(tarea).size()==0){
+			tarea.trabajar(empleado)
+		}
+		else{
+			empleado.cansarse(tarea.dificultad())
+			
+		}
+	}
+	
+}
