@@ -1,0 +1,7 @@
+// Acá los tests
+
+test "testX" {
+
+	assert.that(true)
+
+}
