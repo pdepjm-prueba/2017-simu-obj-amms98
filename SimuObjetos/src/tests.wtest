@@ -1,7 +1,10 @@
-// Acá los tests
-
-test "testX" {
-
-	assert.that(true)
-
+import codigo.*
+describe "minions"{
+	var amarillito=new Ciclope()
+	test "un empleado puede comer y que se le cambie la stamina"
+	{
+		amarillito.comer(banana)
+		assert.equals(20, amarillito.stamina())
+	}
+	test ""
 }
