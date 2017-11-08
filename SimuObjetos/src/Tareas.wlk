@@ -66,6 +66,8 @@ class LimpiarSector inherits Tarea{
 	
 	override method dificultad(empleado)=dificultad
 	
+	method StaminaNecesaria()=tipoSector.StaminaNecesaria()
+	
 }
 
 class NoPuedeArreglarException inherits Exception{

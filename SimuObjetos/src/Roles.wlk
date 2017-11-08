@@ -5,7 +5,7 @@ class Rol{
 	}
 	method puedeDefender()=true
 	method fuerzaExtra()=0
-	method defender(empleado){
+	method defender(empleado,tarea){
 		empleado.perderMitadStamina()
 	}
 	
@@ -21,7 +21,7 @@ class Soldado inherits Rol{
 	}
 	method danio()=practica*2
 	override method fuerzaExtra()=self.danio()
-	override method defender(empleado){}
+	override method defender(empleado,tarea){}
 	
 }
 class Obrero inherits Rol{
@@ -47,23 +47,26 @@ class Capataz inherits Rol{
 	
 	method empleadosCapaces(tarea)=empleados.filter({empleado=>tarea.puedeTrabajar(empleado)})
 	method empleadoMasCapaz(tarea)=self.empleadosCapaces(tarea).max({emp=>emp.experiencia()})
-	override method arreglar(empleado,tarea){
+	
+	method tareaComoCapataz(empleado,tarea,procedimiento){
 		if(self.empleadosCapaces(tarea)==null){
-			super(empleado,tarea.dificultad())
+			procedimiento.apply(empleado)
 		}
 		else{
-			super(self.empleadoMasCapaz(tarea),tarea.dificultad())
+			tarea.trabajar(self.empleadoMasCapaz(tarea))
 		}
 	}
 	
-	override method defender(empleado){
-		if(self.mejoresEmpleadosParaTarea(tarea).size()==0){
-			tarea.trabajar(empleado)
-		}
-		else{
-			empleado.cansarse(tarea.dificultad())
-			
-		}
+	override method arreglar(empleado,tarea){
+		self.tareaComoCapataz(empleado,tarea,{emp=>emp.cansarse(tarea.dificultad())})
+	}
+	
+	override method defender(empleado,tarea){
+		self.tareaComoCapataz(empleado,tarea,{emp=>emp.perderMitadStamina()})
+	}
+	
+	override method limpiar(empleado,tarea){
+		self.tareaComoCapataz(empleado,tarea,{emp=>emp.cansarse(tarea.StaminaNecesaria())})
 	}
 	
 }
